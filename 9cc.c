@@ -287,8 +287,8 @@ void gen(Node *node) {
     printf(" push rax\n");
 }
 
-void tokenize(char *p) {
-    int i = 0;
+Vector *tokenize(char *p) {
+    Vector *tokens = new_vector();
     while(*p) {
         // skip spaces
         if (isspace(*p)) {
@@ -297,66 +297,50 @@ void tokenize(char *p) {
         }
 
         if(*p == '+' || *p == '-' || *p == '*' || *p == '/' || *p == '(' || *p == ')') {
-            tokens[i].ty = *p;
-            tokens[i].input = p;
-            i++;
+            vec_push(tokens, new_token(*p, p));
             p++;
             continue;
         }
 
         if(strncmp(p,">=",2) == 0) {
-            tokens[i].ty = TK_GE;
-            tokens[i].input = p;
-            i++;
+            vec_push(tokens, new_token(TK_GE, p));
             p+= 2;
             continue;
         }
 
         if(strncmp(p,">",1) == 0) {
-            tokens[i].ty = TK_GT;
-            tokens[i].input = p;
-            i++;
+            vec_push(tokens, new_token(TK_GT, p));
             p+= 1;
             continue;
         }
 
         if(strncmp(p,"<=",2) == 0) {
-            tokens[i].ty = TK_LE;
-            tokens[i].input = p;
-            i++;
+            vec_push(tokens, new_token(TK_LE, p));
             p+= 2;
             continue;
         }
 
         if(strncmp(p,"<",1) == 0) {
-            tokens[i].ty = TK_LT;
-            tokens[i].input = p;
-            i++;
+            vec_push(tokens, new_token(TK_LT, p));
             p+= 1;
             continue;
         }
 
         if(strncmp(p,"==",2) == 0) {
-            tokens[i].ty = TK_EQ;
-            tokens[i].input = p;
-            i++;
+            vec_push(tokens, new_token(TK_EQ, p));
             p+= 2;
             continue;
         }
 
         if(strncmp(p,"!=",2) == 0) {
-            tokens[i].ty = TK_NE;
-            tokens[i].input = p;
-            i++;
+            vec_push(tokens, new_token(TK_NE, p));
             p+= 2;
             continue;
         }
 
         if(isdigit(*p)) {
-            tokens[i].ty =TK_NUM;
-            tokens[i].input = p;
-            tokens[i].val = strtol(p, &p, 10);
-            i++;
+            char* input = p;
+            vec_push(tokens, new_token_num(TK_NUM, strtol(p, &p, 10), input));
             continue;
         }
 
@@ -364,8 +348,8 @@ void tokenize(char *p) {
         exit(1);
     }
 
-    tokens[i].ty = TK_EOF;
-    tokens[i].input = p;
+    vec_push(tokens, new_token(TK_EOF, p));
+    return tokens;
 }
 
 int main(int argc, char **argv) {
@@ -380,7 +364,13 @@ int main(int argc, char **argv) {
     }
 
 
-    tokenize(argv[1]);
+    Vector *vector_tokens = tokenize(argv[1]);
+
+    for(int i = 0; i < vector_tokens->len; i++) {
+        tokens[i] = *(((Token **)(vector_tokens->data))[i]);
+    }
+
+
     Node *node = expr();
 
     // output header
