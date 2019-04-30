@@ -4,7 +4,7 @@
 #include<stdlib.h>
 #include<stdarg.h>
 
-#define MAX_TOKENS 100
+#define MAX_TOKENS 10000
 
 //////////////////////// vector
 
@@ -83,6 +83,21 @@ typedef struct Token {
     char* input; // (for error message)
 } Token;
 
+Token *new_token(int ty, int input){
+    Token *token = malloc(sizeof(Token));
+    token->ty = ty;
+    token->input = input;
+    return token;
+}
+
+Token *new_token_num(int ty, int val, int input) {
+    Token *token = malloc(sizeof(Token));
+    token->ty = ty;
+    token->val = val;
+    token->input = input;
+    return token;
+}
+
 Token tokens[MAX_TOKENS]; // tokenized tokens
 int pos = 0;
 
@@ -142,11 +157,13 @@ Node *term() {
         return new_node_num(tokens[pos++].val);
     }
 
-    error("開き括弧でも数値でもないトークンです: %s\n", tokens[pos].input);
+    error("開き括弧でも数値でもない    Vector *tokens = new_vector();
+ークンです: %s\n", tokens[pos].input);
 }
 
 Node *unary() {
-    if (consume('+')) return term();
+    if (consume('+')) return term();    Vector *tokens = new_vector();
+
     if (consume('-')) return new_node('-', new_node_num(0), term());
     return term();
 }
@@ -272,7 +289,6 @@ void gen(Node *node) {
 }
 
 void tokenize(char *p) {
-    int i = 0; //first uninitialized token
     while(*p) {
         // skip spaces
         if (isspace(*p)) {
