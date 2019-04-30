@@ -19,6 +19,12 @@ void error(char* fmt, ...) {
 // type of token
 enum {
     TK_NUM = 256,
+    TK_EQ,
+    TK_NE,
+    TK_LE,
+    TK_GE,
+    TK_LT,
+    TK_GT,
     TK_EOF
 };
 
@@ -35,6 +41,10 @@ int pos = 0;
 
 enum {
     ND_NUM = 256,
+    ND_EQ,
+    ND_NE,
+    ND_LE,
+    ND_LT,
 };
 
 typedef struct Node {
@@ -67,11 +77,11 @@ int consume(int ty) {
     return 1;
 }
 
-Node *add();
+Node *expr();
 
 Node *term() {
     if (consume('(')) {
-        Node *node = add();
+        Node *node = expr();
         if(!consume(')')) {
             error("開き括弧に対応する閉じ括弧がありません:%s\n", tokens[pos].input);
         }
@@ -120,6 +130,42 @@ Node *add() {
     }
 }
 
+Node *relational() {
+    Node *node = add();
+
+    for(;;) {
+        if (consume(TK_LE)) {
+            node = new_node(ND_LE, node, add());
+        } else if (consume(TK_GE)) {
+            node = new_node(ND_LE, add(), node);
+        } else if (consume(TK_LT)) {
+            node = new_node(ND_LT, node, add());
+        } else if (consume(TK_GT)) {
+            node = new_node(ND_LT, add(), node);
+        } else {
+            return node;
+        }
+    }
+}
+
+Node *equality() {
+    Node *node = relational();
+
+    for(;;) {
+        if (consume(TK_EQ)) {
+            node = new_node(ND_EQ, node, relational());
+        } else if (consume(TK_NE)) {
+            node = new_node(ND_NE, node, relational());
+        } else {
+            return node;
+        }
+    }
+}
+
+Node *expr() {
+    return equality();
+}
+
 
 ///////////////// assembly
 
@@ -150,6 +196,27 @@ void gen(Node *node) {
         printf("    mov rdx, 0\n");
         printf("    div rdi\n");
         break;
+    case ND_EQ:
+        printf("    cmp rax, rdi\n");
+        printf("    sete al\n");
+        printf("    movzb rax, al\n");
+        break;
+    case ND_NE:
+        printf("    cmp rax, rdi\n");
+        printf("    setne al\n");
+        printf("    movzb rax, al\n");
+        break;
+    case ND_LE:
+        printf("    cmp rax, rdi\n");
+        printf("    setle al\n");
+        printf("    movzb rax, al\n");
+        break;
+    case ND_LT:
+        printf("    cmp rax, rdi\n");
+        printf("    setl al\n");
+        printf("    movzb rax, al\n");
+        break;
+
     }
 
     printf(" push rax\n");
@@ -169,6 +236,54 @@ void tokenize(char *p) {
             tokens[i].input = p;
             i++;
             p++;
+            continue;
+        }
+
+        if(strncmp(p,">=",2) == 0) {
+            tokens[i].ty = TK_GE;
+            tokens[i].input = p;
+            i++;
+            p+= 2;
+            continue;
+        }
+
+        if(strncmp(p,">",1) == 0) {
+            tokens[i].ty = TK_GT;
+            tokens[i].input = p;
+            i++;
+            p+= 1;
+            continue;
+        }
+
+        if(strncmp(p,"<=",2) == 0) {
+            tokens[i].ty = TK_LE;
+            tokens[i].input = p;
+            i++;
+            p+= 2;
+            continue;
+        }
+
+        if(strncmp(p,"<",1) == 0) {
+            tokens[i].ty = TK_LT;
+            tokens[i].input = p;
+            i++;
+            p+= 1;
+            continue;
+        }
+
+        if(strncmp(p,"==",2) == 0) {
+            tokens[i].ty = TK_EQ;
+            tokens[i].input = p;
+            i++;
+            p+= 2;
+            continue;
+        }
+
+        if(strncmp(p,"!=",2) == 0) {
+            tokens[i].ty = TK_NE;
+            tokens[i].input = p;
+            i++;
+            p+= 2;
             continue;
         }
 
@@ -195,7 +310,7 @@ int main(int argc, char **argv) {
     }
 
     tokenize(argv[1]);
-    Node *node = add();
+    Node *node = expr();
 
     // output header
     printf(".intel_syntax noprefix\n");
