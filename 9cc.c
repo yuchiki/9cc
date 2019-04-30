@@ -98,7 +98,7 @@ Token *new_token_num(int ty, int val, char* input) {
     return token;
 }
 
-Token tokens[MAX_TOKENS]; // tokenized tokens
+Vector *tokens;// tokenized tokens
 int pos = 0;
 
 /////////////////// nodes
@@ -136,7 +136,7 @@ Node *new_node_num(int val) {
 ///////////// parser
 
 int consume(int ty) {
-    if (tokens[pos].ty != ty) return 0;
+    if ( (((Token **)(tokens->data))[pos])->ty != ty) return 0;
     pos++;
     return 1;
 }
@@ -147,17 +147,17 @@ Node *term() {
     if (consume('(')) {
         Node *node = expr();
         if(!consume(')')) {
-            error("開き括弧に対応する閉じ括弧がありません:%s\n", tokens[pos].input);
+            error("開き括弧に対応する閉じ括弧がありません:%s\n", (((Token **)(tokens->data))[pos])->input);
         }
 
         return node;
     }
 
-    if (tokens[pos].ty == TK_NUM) {
-        return new_node_num(tokens[pos++].val);
+    if ( (((Token **)(tokens->data))[pos])->ty == TK_NUM) {
+        return new_node_num( (((Token **)(tokens->data))[pos++])->val);
     }
 
-    error("開き括弧でも数値でもないトークンです: %s\n", tokens[pos].input);
+    error("開き括弧でも数値でもないトークンです: %s\n",  (((Token **)(tokens->data))[pos])->input);
 }
 
 Node *unary() {
@@ -363,11 +363,8 @@ int main(int argc, char **argv) {
     }
 
 
-    Vector *vector_tokens = tokenize(argv[1]);
+    tokens = tokenize(argv[1]);
 
-    for(int i = 0; i < vector_tokens->len; i++) {
-        tokens[i] = *(((Token **)(vector_tokens->data))[i]);
-    }
 
 
     Node *node = expr();
