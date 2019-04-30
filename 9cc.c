@@ -157,8 +157,7 @@ Node *term() {
         return new_node_num(tokens[pos++].val);
     }
 
-    error("開き括弧でも数値でもない    Vector *tokens = new_vector();
-ークンです: %s\n", tokens[pos].input);
+    error("開き括弧でも数値でもないトークンです: %s\n", tokens[pos].input);
 }
 
 Node *unary() {
@@ -289,6 +288,7 @@ void gen(Node *node) {
 }
 
 void tokenize(char *p) {
+    int i = 0;
     while(*p) {
         // skip spaces
         if (isspace(*p)) {
