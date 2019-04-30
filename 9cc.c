@@ -83,14 +83,14 @@ typedef struct Token {
     char* input; // (for error message)
 } Token;
 
-Token *new_token(int ty, int input){
+Token *new_token(int ty, char* input){
     Token *token = malloc(sizeof(Token));
     token->ty = ty;
     token->input = input;
     return token;
 }
 
-Token *new_token_num(int ty, int val, int input) {
+Token *new_token_num(int ty, int val, char* input) {
     Token *token = malloc(sizeof(Token));
     token->ty = ty;
     token->val = val;
@@ -161,8 +161,7 @@ Node *term() {
 }
 
 Node *unary() {
-    if (consume('+')) return term();    Vector *tokens = new_vector();
-
+    if (consume('+')) return term();
     if (consume('-')) return new_node('-', new_node_num(0), term());
     return term();
 }
