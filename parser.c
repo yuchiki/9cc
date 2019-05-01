@@ -23,7 +23,7 @@ Node *new_node_num(int val) {
 Node *new_node_ident(char *input) {
     Node *node = malloc(sizeof(Node));
     node->ty = ND_IDENT;
-    node->val = *input;
+    node->name = *input;
     return node;
 }
 
@@ -131,9 +131,36 @@ Node *equality() {
     }
 }
 
-Node *expr() { return equality(); }
+Node *assign() {
+    Node *node = equality();
 
-Node *parse(Vector *tokenized_tokens) {
+    while (consume('=')) {
+        node = new_node('=', node, assign());
+    }
+    return node;
+}
+
+Node *stmt() {
+    Node *node = assign();
+    if (!consume(';'))
+        error("';'ではないトークンです: %s",
+              (((Token **)(tokens->data))[pos])->input);
+    return node;
+}
+
+Node *expr() { return assign(); }
+
+Node *code[100];
+
+void program() {
+    int i = 0;
+    while ((((Token **)(tokens->data))[pos])->ty != TK_EOF) {
+        code[i++] = stmt();
+    }
+    code[i] = NULL;
+}
+
+void parse(Vector *tokenized_tokens) {
     tokens = tokenized_tokens;
-    return expr();
+    program();
 }

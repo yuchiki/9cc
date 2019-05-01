@@ -56,13 +56,16 @@ enum {
 };
 
 typedef struct Node {
-    int ty; // operator or ND_NUM;
+    int ty;
     struct Node *lhs;
     struct Node *rhs;
-    int val; // ty
+    int val;   // only used when ND_NUM
+    char name; // only used when ND_IDENT
 } Node;
 
-Node *parse(Vector *tokenized_tokens);
+void parse(Vector *tokenized_tokens);
+
+extern Node *code[100];
 
 ////////////////////// codegen
 

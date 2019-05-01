@@ -30,16 +30,30 @@ int main(int argc, char **argv) {
 
     Vector *tokens = tokenize(argv[1]);
 
-    Node *node = parse(tokens);
+    parse(tokens);
 
     // output header
     printf(".intel_syntax noprefix\n");
     printf(".global main\n");
     printf("main:\n");
 
-    gen(node);
+    // prologue
+    printf("    push rbp\n");
+    printf("    mov rbp, rsp\n");
+    printf("    sub rsp, 208\n"); // 8 * 26
 
-    printf("    pop rax\n");
+    int i = 0;
+    while (code[i]) {
+        gen(code[i]);
+        i++;
+
+        printf("    pop rax\n");
+    }
+
+    // epilogue
+    printf("    mov rsp, rbp\n");
+    printf("    pop rbp\n");
     printf("    ret\n");
+
     return 0;
 }

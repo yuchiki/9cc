@@ -66,7 +66,7 @@ Vector *tokenize(char *p) {
         }
 
         if (*p == '+' || *p == '-' || *p == '*' || *p == '/' || *p == '(' ||
-            *p == '=' || *p == ')') {
+            *p == ')' || *p == '=' || *p == ';') {
             vec_push(tokens, new_token(*p, p));
             p++;
             continue;
@@ -81,9 +81,10 @@ Vector *tokenize(char *p) {
         if ('a' <= *p && *p <= 'z') {
             vec_push(tokens, new_token(TK_IDENT, p));
             p++;
+            continue;
         }
 
-        error("トークナイズできません。: %s", p);
+        error("トークナイズできません: %s", p);
         exit(1);
     }
 
