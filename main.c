@@ -28,9 +28,9 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    tokens = tokenize(argv[1]);
+    Vector *tokens = tokenize(argv[1]);
 
-    Node *node = expr();
+    Node *node = parse(tokens);
 
     // output header
     printf(".intel_syntax noprefix\n");

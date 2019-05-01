@@ -1,5 +1,6 @@
 #include"9cc.h"
 
+Vector *tokens;
 
 Node *new_node(int ty, Node *lhs, Node *rhs) {
     Node *node = malloc(sizeof(Node));
@@ -113,4 +114,9 @@ Node *equality() {
 
 Node *expr() {
     return equality();
+}
+
+Node *parse(Vector *tokenized_tokens) {
+    tokens = tokenized_tokens;
+    return expr();
 }

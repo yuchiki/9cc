@@ -56,9 +56,7 @@ typedef struct Node {
     int val;          // ty
 } Node;
 
-Node *expr();
-
-Vector *tokens;// tokenized tokens
+Node *parse(Vector *tokenized_tokens);
 
 ////////////////////// codegen
 
