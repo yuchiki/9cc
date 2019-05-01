@@ -1,5 +1,7 @@
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "9cc.h"
 
@@ -23,13 +25,6 @@ Vector *tokenize(char *p) {
     while (*p) {
         // skip spaces
         if (isspace(*p)) {
-            p++;
-            continue;
-        }
-
-        if (*p == '+' || *p == '-' || *p == '*' || *p == '/' || *p == '(' ||
-            *p == ')') {
-            vec_push(tokens, new_token(*p, p));
             p++;
             continue;
         }
@@ -67,6 +62,13 @@ Vector *tokenize(char *p) {
         if (strncmp(p, "!=", 2) == 0) {
             vec_push(tokens, new_token(TK_NE, p));
             p += 2;
+            continue;
+        }
+
+        if (*p == '+' || *p == '-' || *p == '*' || *p == '/' || *p == '(' ||
+            *p == '=' || *p == ')') {
+            vec_push(tokens, new_token(*p, p));
+            p++;
             continue;
         }
 

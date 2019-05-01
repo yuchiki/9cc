@@ -2,6 +2,10 @@
 #ifndef NINECC_H
 #define NINECC_H
 
+//////////////////////////// util
+
+void error(char *fmt, ...);
+
 /////////////////////////// vector
 
 typedef struct {
@@ -44,6 +48,7 @@ Vector *tokenize(char *p);
 
 enum {
     ND_NUM = 256,
+    ND_IDENT,
     ND_EQ,
     ND_NE,
     ND_LE,

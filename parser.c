@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "9cc.h"
 
 Vector *tokens;
@@ -14,6 +17,13 @@ Node *new_node_num(int val) {
     Node *node = malloc(sizeof(Node));
     node->ty = ND_NUM;
     node->val = val;
+    return node;
+}
+
+Node *new_node_ident(char *input) {
+    Node *node = malloc(sizeof(Node));
+    node->ty = ND_IDENT;
+    node->val = *input;
     return node;
 }
 
@@ -43,8 +53,14 @@ Node *term() {
         return new_node_num((((Token **)(tokens->data))[pos++])->val);
     }
 
+    if ((((Token **)(tokens->data))[pos])->ty == TK_IDENT) {
+        return new_node_ident((((Token **)(tokens->data))[pos++])->input);
+    }
+
     error("開き括弧でも数値でもないトークンです: %s\n",
           (((Token **)(tokens->data))[pos])->input);
+
+    return 0; // unreachable here. This line exists to suppress warnings.
 }
 
 Node *unary() {
