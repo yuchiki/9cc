@@ -1,10 +1,10 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-#include"9cc.h"
+#include "9cc.h"
 
 void gen(Node *node) {
-    if(node->ty == ND_NUM) {
+    if (node->ty == ND_NUM) {
         printf("    push %d\n", node->val);
         return;
     }
@@ -15,8 +15,7 @@ void gen(Node *node) {
     printf("    pop rdi\n");
     printf("    pop rax\n");
 
-    switch (node->ty)
-    {
+    switch (node->ty) {
     case '+':
         printf("    add rax, rdi\n");
         break;

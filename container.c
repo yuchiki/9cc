@@ -1,7 +1,7 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-#include"9cc.h"
+#include "9cc.h"
 
 //////////////////////// vector
 
@@ -21,20 +21,21 @@ void vec_push(Vector *vec, void *elem) {
     vec->data[vec->len++] = elem;
 }
 
-
 ////////////////////////// vector test
 
 void expect(int line, int expected, int actual) {
-    if (expected == actual) return ;
+    if (expected == actual)
+        return;
     fprintf(stderr, "%d: %d expected, but got %d\n", line, expected, actual);
     exit(1);
 }
 
 void runtest() {
-    Vector *vec =new_vector();
+    Vector *vec = new_vector();
     expect(__LINE__, 0, vec->len);
 
-    for(int i = 0; i < 100; i++) vec_push(vec, (void *)i);
+    for (int i = 0; i < 100; i++)
+        vec_push(vec, (void *)i);
 
     expect(__LINE__, 100, vec->len);
     expect(__LINE__, 0, (long)vec->data[0]);

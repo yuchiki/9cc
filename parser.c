@@ -1,4 +1,4 @@
-#include"9cc.h"
+#include "9cc.h"
 
 Vector *tokens;
 
@@ -22,7 +22,8 @@ Node *new_node_num(int val) {
 int pos = 0;
 
 int consume(int ty) {
-    if ( (((Token **)(tokens->data))[pos])->ty != ty) return 0;
+    if ((((Token **)(tokens->data))[pos])->ty != ty)
+        return 0;
     pos++;
     return 1;
 }
@@ -32,30 +33,34 @@ Node *expr();
 Node *term() {
     if (consume('(')) {
         Node *node = expr();
-        if(!consume(')')) {
-            error("開き括弧に対応する閉じ括弧がありません:%s\n", (((Token **)(tokens->data))[pos])->input);
+        if (!consume(')')) {
+            error("開き括弧に対応する閉じ括弧がありません:%s\n",
+                  (((Token **)(tokens->data))[pos])->input);
         }
 
         return node;
     }
 
-    if ( (((Token **)(tokens->data))[pos])->ty == TK_NUM) {
-        return new_node_num( (((Token **)(tokens->data))[pos++])->val);
+    if ((((Token **)(tokens->data))[pos])->ty == TK_NUM) {
+        return new_node_num((((Token **)(tokens->data))[pos++])->val);
     }
 
-    error("開き括弧でも数値でもないトークンです: %s\n",  (((Token **)(tokens->data))[pos])->input);
+    error("開き括弧でも数値でもないトークンです: %s\n",
+          (((Token **)(tokens->data))[pos])->input);
 }
 
 Node *unary() {
-    if (consume('+')) return term();
-    if (consume('-')) return new_node('-', new_node_num(0), term());
+    if (consume('+'))
+        return term();
+    if (consume('-'))
+        return new_node('-', new_node_num(0), term());
     return term();
 }
 
 Node *mul() {
     Node *node = unary();
 
-    for(;;) {
+    for (;;) {
         if (consume('*')) {
             node = new_node('*', node, unary());
         } else if (consume('/')) {
@@ -69,7 +74,7 @@ Node *mul() {
 Node *add() {
     Node *node = mul();
 
-    for(;;) {
+    for (;;) {
         if (consume('+')) {
             node = new_node('+', node, mul());
         } else if (consume('-')) {
@@ -83,7 +88,7 @@ Node *add() {
 Node *relational() {
     Node *node = add();
 
-    for(;;) {
+    for (;;) {
         if (consume(TK_LE)) {
             node = new_node(ND_LE, node, add());
         } else if (consume(TK_GE)) {
@@ -101,7 +106,7 @@ Node *relational() {
 Node *equality() {
     Node *node = relational();
 
-    for(;;) {
+    for (;;) {
         if (consume(TK_EQ)) {
             node = new_node(ND_EQ, node, relational());
         } else if (consume(TK_NE)) {
@@ -112,9 +117,7 @@ Node *equality() {
     }
 }
 
-Node *expr() {
-    return equality();
-}
+Node *expr() { return equality(); }
 
 Node *parse(Vector *tokenized_tokens) {
     tokens = tokenized_tokens;

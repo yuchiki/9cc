@@ -33,9 +33,9 @@ enum {
 };
 
 typedef struct Token {
-    int ty;      // type of token
+    int ty; // type of token
     int val;
-    char* input; // (for error message)
+    char *input; // (for error message)
 } Token;
 
 Vector *tokenize(char *p);
@@ -51,10 +51,10 @@ enum {
 };
 
 typedef struct Node {
-    int ty;           // operator or ND_NUM;
+    int ty; // operator or ND_NUM;
     struct Node *lhs;
     struct Node *rhs;
-    int val;          // ty
+    int val; // ty
 } Node;
 
 Node *parse(Vector *tokenized_tokens);
@@ -63,4 +63,4 @@ Node *parse(Vector *tokenized_tokens);
 
 void gen(Node *node);
 
-#endif //NINECC_H
+#endif // NINECC_H
