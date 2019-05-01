@@ -1,3 +1,6 @@
+#include<stdio.h>
+#include<stdlib.h>
+
 #include"9cc.h"
 
 
@@ -75,6 +78,11 @@ Vector *tokenize(char *p) {
             char* input = p;
             vec_push(tokens, new_token_num(TK_NUM, strtol(p, &p, 10), input));
             continue;
+        }
+
+        if ('a' <= *p && *p <= 'z') {
+            vec_push(tokens, new_token(TK_IDENT, p));
+            p++;
         }
 
         error("トークナイズできません。: %s", p);
