@@ -62,4 +62,8 @@ Node *expr();
 Vector *tokens;// tokenized tokens
 int pos;
 
+////////////////////// codegen
+
+void gen(Node *node);
+
 #endif //NINECC_H
