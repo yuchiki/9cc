@@ -1,4 +1,6 @@
 
+#ifndef NINECC_H
+#define NINECC_H
 
 /////////////////////////// vector
 
@@ -37,3 +39,5 @@ typedef struct Token {
 } Token;
 
 Vector *tokenize(char *p);
+
+#endif NINECC_H
