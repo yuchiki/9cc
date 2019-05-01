@@ -60,7 +60,7 @@ typedef struct Node {
 Node *expr();
 
 Vector *tokens;// tokenized tokens
-int pos;
+extern int pos;
 
 ////////////////////// codegen
 
