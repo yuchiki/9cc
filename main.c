@@ -5,8 +5,6 @@
 #include<stdarg.h>
 #include"9cc.h"
 
-int pos = 0;
-
 ////////////////////////// util
 
 void error(char* fmt, ...) {

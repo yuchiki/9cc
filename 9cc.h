@@ -10,7 +10,6 @@ typedef struct {
     int len;
 } Vector;
 
-
 Vector *new_vector();
 void vec_push(Vector *vec, void *elem);
 
@@ -60,7 +59,6 @@ typedef struct Node {
 Node *expr();
 
 Vector *tokens;// tokenized tokens
-extern int pos;
 
 ////////////////////// codegen
 

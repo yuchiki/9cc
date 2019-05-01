@@ -18,6 +18,8 @@ Node *new_node_num(int val) {
 
 ///////////// parser
 
+int pos = 0;
+
 int consume(int ty) {
     if ( (((Token **)(tokens->data))[pos])->ty != ty) return 0;
     pos++;
