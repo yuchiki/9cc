@@ -29,49 +29,49 @@ Vector *tokenize(char *p) {
             continue;
         }
 
-        if(*p == '+' || *p == '-' || *p == '*' || *p == '/' || *p == '(' || *p == ')') {
+        if (*p == '+' || *p == '-' || *p == '*' || *p == '/' || *p == '(' || *p == ')') {
             vec_push(tokens, new_token(*p, p));
             p++;
             continue;
         }
 
-        if(strncmp(p,">=",2) == 0) {
+        if (strncmp(p,">=",2) == 0) {
             vec_push(tokens, new_token(TK_GE, p));
             p+= 2;
             continue;
         }
 
-        if(strncmp(p,">",1) == 0) {
+        if (strncmp(p,">",1) == 0) {
             vec_push(tokens, new_token(TK_GT, p));
             p+= 1;
             continue;
         }
 
-        if(strncmp(p,"<=",2) == 0) {
+        if (strncmp(p,"<=",2) == 0) {
             vec_push(tokens, new_token(TK_LE, p));
             p+= 2;
             continue;
         }
 
-        if(strncmp(p,"<",1) == 0) {
+        if (strncmp(p,"<",1) == 0) {
             vec_push(tokens, new_token(TK_LT, p));
             p+= 1;
             continue;
         }
 
-        if(strncmp(p,"==",2) == 0) {
+        if (strncmp(p,"==",2) == 0) {
             vec_push(tokens, new_token(TK_EQ, p));
             p+= 2;
             continue;
         }
 
-        if(strncmp(p,"!=",2) == 0) {
+        if (strncmp(p,"!=",2) == 0) {
             vec_push(tokens, new_token(TK_NE, p));
             p+= 2;
             continue;
         }
 
-        if(isdigit(*p)) {
+        if (isdigit(*p)) {
             char* input = p;
             vec_push(tokens, new_token_num(TK_NUM, strtol(p, &p, 10), input));
             continue;
