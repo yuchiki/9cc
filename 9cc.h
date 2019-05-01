@@ -40,4 +40,26 @@ typedef struct Token {
 
 Vector *tokenize(char *p);
 
-#endif NINECC_H
+/////////////////// nodes
+
+enum {
+    ND_NUM = 256,
+    ND_EQ,
+    ND_NE,
+    ND_LE,
+    ND_LT,
+};
+
+typedef struct Node {
+    int ty;           // operator or ND_NUM;
+    struct Node *lhs;
+    struct Node *rhs;
+    int val;          // ty
+} Node;
+
+Node *expr();
+
+Vector *tokens;// tokenized tokens
+int pos;
+
+#endif //NINECC_H
