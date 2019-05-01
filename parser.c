@@ -17,8 +17,6 @@ Node *new_node_num(int val) {
     return node;
 }
 
-///////////// parser
-
 int pos = 0;
 
 int consume(int ty) {

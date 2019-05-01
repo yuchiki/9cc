@@ -3,8 +3,6 @@
 
 #include "9cc.h"
 
-///////////////////// tokens
-
 Token *new_token(int ty, char *input) {
     Token *token = malloc(sizeof(Token));
     token->ty = ty;
