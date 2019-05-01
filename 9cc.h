@@ -22,7 +22,6 @@ void runtest();
 // type of token
 enum {
     TK_NUM = 256,
-    TK_IDENT,
     TK_EQ,
     TK_NE,
     TK_LE,
