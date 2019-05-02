@@ -141,7 +141,14 @@ Node *assign() {
 }
 
 Node *stmt() {
-    Node *node = assign();
+    Node *node;
+
+    if (consume(TK_RETURN)) {
+        node = new_node(TK_RETURN, assign(), NULL);
+    } else {
+        node = assign();
+    }
+
     if (!consume(';'))
         error("';'ではないトークンです: %s",
               (((Token **)(tokens->data))[pos])->input);

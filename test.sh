@@ -57,4 +57,6 @@ try 1 "5 != 4;"
 try 6 "a = 1 + 2; a + 3;"
 try 9 "a = 1; b = 2; c = 3; a = 4; a + b + c;"
 
+try 3 "a = 1; return a + 2; a + 5;"
+
 echo OK

@@ -29,6 +29,12 @@ Vector *tokenize(char *p) {
             continue;
         }
 
+        if (strncmp(p, "return", 6) == 0 && !isalnum(p[6])) {
+            vec_push(tokens, new_token(TK_RETURN, p));
+            p += 6;
+            continue;
+        }
+
         if (strncmp(p, ">=", 2) == 0) {
             vec_push(tokens, new_token(TK_GE, p));
             p += 2;

@@ -27,6 +27,7 @@ void runtest();
 enum {
     TK_NUM = 256,
     TK_IDENT,
+    TK_RETURN,
     TK_EQ,
     TK_NE,
     TK_LE,
@@ -49,6 +50,7 @@ Vector *tokenize(char *p);
 enum {
     ND_NUM = 256,
     ND_IDENT,
+    ND_RETURN,
     ND_EQ,
     ND_NE,
     ND_LE,
