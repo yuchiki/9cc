@@ -71,8 +71,6 @@ void vector_test() {
     expect(__LINE__, 0, (long)vec->data[0]);
     expect(__LINE__, 50, (long)vec->data[50]);
     expect(__LINE__, 99, (long)vec->data[99]);
-
-    printf("OK: vector");
 }
 
 void map_test() {
@@ -89,4 +87,8 @@ void map_test() {
     map_put(map, "foo", (void *)6);
     expect(__LINE__, 6, (long)map_get(map, "foo"));
 }
-void runtest() { vector_test(); }
+void runtest() {
+    vector_test();
+    map_test();
+    printf("OK\n");
+}
