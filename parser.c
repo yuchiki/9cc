@@ -27,6 +27,13 @@ Node *new_node_ident(char *name) {
     return node;
 }
 
+Node *new_node_block(Vector *statements) {
+    Node *node = malloc(sizeof(Node));
+    node->ty = ND_BLOCK;
+    node->statements = statements;
+    return node;
+}
+
 int pos = 0;
 
 int consume(int ty) {
@@ -138,6 +145,12 @@ Node *assign() {
 }
 
 Node *stmt() {
+    if (consume('{')) {
+        Vector *statements = new_vector();
+        while (!consume('}')) vec_push(statements, stmt());
+        return new_node_block(statements);
+    }
+
     Node *node;
 
     if (consume(TK_RETURN)) {

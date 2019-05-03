@@ -63,6 +63,7 @@ enum {
     ND_NUM = 256,
     ND_IDENT,
     ND_RETURN,
+    ND_BLOCK,
     ND_EQ,
     ND_NE,
     ND_LE,
@@ -73,8 +74,9 @@ typedef struct Node {
     int ty;
     struct Node *lhs;
     struct Node *rhs;
-    int val;    // only used when ND_NUM
-    char *name; // only used when ND_IDENT
+    int val;            // only used when ND_NUM
+    char *name;         // only used when ND_IDENT
+    Vector *statements; // only used when ND_BLOCK
 } Node;
 
 void parse(Vector *tokenized_tokens);

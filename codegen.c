@@ -44,6 +44,14 @@ void gen(Node *node, Map *variables) {
         return;
     }
 
+    if (node->ty == ND_BLOCK) {
+        for (int i = 0; i < node->statements->len; i++) {
+            gen(node->statements->data[i], variables);
+            printf("    pop rax\n");
+        }
+        return;
+    }
+
     if (node->ty == '=') {
         gen_lval(node->lhs, variables);
         gen(node->rhs, variables);
