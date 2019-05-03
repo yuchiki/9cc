@@ -53,10 +53,11 @@ try 1 "5 != 6;"
 try 0 "5 != 5;"
 try 1 "5 != 4;"
 
-
 try 6 "a = 1 + 2; a + 3;"
 try 9 "a = 1; b = 2; c = 3; a = 4; a + b + c;"
 
 try 3 "a = 1; return a + 2; a + 5;"
+
+try 9 "foo = 1; bar = 2; baz = 3; foo = 4; return foo + bar + baz;"
 
 echo OK

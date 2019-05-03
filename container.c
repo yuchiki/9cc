@@ -24,11 +24,6 @@ void vec_push(Vector *vec, void *elem) {
 
 ////////////////////////// map
 
-typedef struct {
-    Vector *keys;
-    Vector *vals;
-} Map;
-
 Map *new_map() {
     Map *map = malloc(sizeof(Map));
     map->keys = new_vector();
@@ -54,8 +49,7 @@ void *map_get(Map *map, char *key) {
 ///////////////////////// test
 
 void expect(int line, int expected, int actual) {
-    if (expected == actual)
-        return;
+    if (expected == actual) return;
     fprintf(stderr, "%d: %d expected, but got %d\n", line, expected, actual);
     exit(1);
 }
@@ -64,8 +58,7 @@ void vector_test() {
     Vector *vec = new_vector();
     expect(__LINE__, 0, vec->len);
 
-    for (long i = 0; i < 100; i++)
-        vec_push(vec, (void *)i);
+    for (long i = 0; i < 100; i++) vec_push(vec, (void *)i);
 
     expect(__LINE__, 100, vec->len);
     expect(__LINE__, 0, (long)vec->data[0]);
@@ -75,14 +68,18 @@ void vector_test() {
 
 void map_test() {
     Map *map = new_map();
+
+    expect(__LINE__, 0, (long)map->keys->len);
     expect(__LINE__, 0, (long)map_get(map, "foo"));
 
     map_put(map, "foo", (void *)2);
     expect(__LINE__, 2, (long)map_get(map, "foo"));
+    expect(__LINE__, 1, (long)map->keys->len);
 
     map_put(map, "bar", (void *)4);
     expect(__LINE__, 4, (long)map_get(map, "bar"));
     expect(__LINE__, 2, (long)map_get(map, "foo"));
+    expect(__LINE__, 2, (long)map->keys->len);
 
     map_put(map, "foo", (void *)6);
     expect(__LINE__, 6, (long)map_get(map, "foo"));

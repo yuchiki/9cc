@@ -17,7 +17,18 @@ typedef struct {
 Vector *new_vector();
 void vec_push(Vector *vec, void *elem);
 
-////////////////////////// vector test
+////////////////////////// map
+
+typedef struct {
+    Vector *keys;
+    Vector *vals;
+} Map;
+
+Map *new_map();
+void map_put(Map *map, char *key, void *val);
+void *map_get(Map *map, char *key);
+
+////////////////////////// container test
 
 void runtest();
 
@@ -37,9 +48,10 @@ enum {
     TK_EOF
 };
 
-typedef struct Token {
-    int ty; // type of token
-    int val;
+typedef struct {
+    int ty;      // type of token
+    int val;     // used when TK_NUM
+    char *name;  // used when TK_IDENT
     char *input; // (for error message)
 } Token;
 
@@ -61,8 +73,8 @@ typedef struct Node {
     int ty;
     struct Node *lhs;
     struct Node *rhs;
-    int val;   // only used when ND_NUM
-    char name; // only used when ND_IDENT
+    int val;    // only used when ND_NUM
+    char *name; // only used when ND_IDENT
 } Node;
 
 void parse(Vector *tokenized_tokens);
@@ -71,6 +83,6 @@ extern Node *code[100];
 
 ////////////////////// codegen
 
-void gen(Node *node);
+void gen(Node *node, Map *variables);
 
 #endif // NINECC_H

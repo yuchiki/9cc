@@ -3,3 +3,5 @@ BraceWrapping:
     AfterControlStatement: false
 
 IndentWidth: 4
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true

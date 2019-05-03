@@ -3,18 +3,24 @@
 
 #include "9cc.h"
 
-void gen_lval(Node *node) { // push the address
+void gen_lval(Node *node, Map *variables) { // push the address
     if (node->ty != ND_IDENT) {
         error("代入の左辺値が変数ではありません");
     }
 
-    int offset = ('z' - node->name + 1) * 8;
+    long offset = (long)map_get(variables, node->name);
+
+    if (offset == 0) {
+        offset = (variables->keys->len + 1) * 8;
+        map_put(variables, node->name, (void *)offset);
+    }
+
     printf("    mov rax, rbp\n");
-    printf("    sub rax, %d\n", offset);
+    printf("    sub rax, %ld\n", offset);
     printf("    push rax\n");
 }
 
-void gen(Node *node) {
+void gen(Node *node, Map *variables) {
 
     if (node->ty == ND_NUM) {
         printf("    push %d\n", node->val);
@@ -22,7 +28,7 @@ void gen(Node *node) {
     }
 
     if (node->ty == ND_IDENT) {
-        gen_lval(node);
+        gen_lval(node, variables);
         printf("    pop rax\n");
         printf("    mov rax, [rax]\n");
         printf("    push rax\n");
@@ -30,7 +36,7 @@ void gen(Node *node) {
     }
 
     if (node->ty == ND_RETURN) {
-        gen(node->lhs);
+        gen(node->lhs, variables);
         printf("    pop rax\n");
         printf("    mov rsp, rbp\n");
         printf("    pop rbp\n");
@@ -39,8 +45,8 @@ void gen(Node *node) {
     }
 
     if (node->ty == '=') {
-        gen_lval(node->lhs);
-        gen(node->rhs);
+        gen_lval(node->lhs, variables);
+        gen(node->rhs, variables);
 
         printf("    pop rdi\n");
         printf("    pop rax\n");
@@ -49,8 +55,8 @@ void gen(Node *node) {
         return;
     }
 
-    gen(node->lhs);
-    gen(node->rhs);
+    gen(node->lhs, variables);
+    gen(node->rhs, variables);
 
     printf("    pop rdi\n");
     printf("    pop rax\n");

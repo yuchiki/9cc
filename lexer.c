@@ -20,6 +20,14 @@ Token *new_token_num(int ty, int val, char *input) {
     return token;
 }
 
+Token *new_token_ident(char *name, char *input) {
+    Token *token = malloc(sizeof(Token));
+    token->ty = TK_IDENT;
+    token->name = name;
+    token->input = input;
+    return token;
+}
+
 Vector *tokenize(char *p) {
     Vector *tokens = new_vector();
     while (*p) {
@@ -84,9 +92,15 @@ Vector *tokenize(char *p) {
             continue;
         }
 
-        if ('a' <= *p && *p <= 'z') {
-            vec_push(tokens, new_token(TK_IDENT, p));
-            p++;
+        if (isalpha(*p)) {
+            int len = 1;
+            while (isalnum(*(p + len))) len++;
+
+            char *name = malloc(sizeof(char) * (len + 1));
+            strncpy(name, p, len);
+            name[len] = '\0';
+            vec_push(tokens, new_token_ident(name, p));
+            p += len;
             continue;
         }
 

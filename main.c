@@ -43,8 +43,9 @@ int main(int argc, char **argv) {
     printf("    sub rsp, 208\n"); // 8 * 26
 
     int i = 0;
+    Map *variables = new_map();
     while (code[i]) {
-        gen(code[i]);
+        gen(code[i], variables);
         i++;
 
         printf("    pop rax\n");

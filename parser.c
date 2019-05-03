@@ -20,18 +20,17 @@ Node *new_node_num(int val) {
     return node;
 }
 
-Node *new_node_ident(char *input) {
+Node *new_node_ident(char *name) {
     Node *node = malloc(sizeof(Node));
     node->ty = ND_IDENT;
-    node->name = *input;
+    node->name = name;
     return node;
 }
 
 int pos = 0;
 
 int consume(int ty) {
-    if ((((Token **)(tokens->data))[pos])->ty != ty)
-        return 0;
+    if ((((Token **)(tokens->data))[pos])->ty != ty) return 0;
     pos++;
     return 1;
 }
@@ -54,7 +53,7 @@ Node *term() {
     }
 
     if ((((Token **)(tokens->data))[pos])->ty == TK_IDENT) {
-        return new_node_ident((((Token **)(tokens->data))[pos++])->input);
+        return new_node_ident((((Token **)(tokens->data))[pos++])->name);
     }
 
     error("開き括弧でも数値でもないトークンです: %s\n",
@@ -64,10 +63,8 @@ Node *term() {
 }
 
 Node *unary() {
-    if (consume('+'))
-        return term();
-    if (consume('-'))
-        return new_node('-', new_node_num(0), term());
+    if (consume('+')) return term();
+    if (consume('-')) return new_node('-', new_node_num(0), term());
     return term();
 }
 
