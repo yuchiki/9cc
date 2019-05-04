@@ -55,7 +55,7 @@ void gen(Node *node, Map *variables) {
 
     if (node->ty == ND_IFELSE) {
         int id = gen_unique_id();
-        gen(node->test_statement, variables);
+        gen(node->cond_statement, variables);
         printf("    pop rax\n");
         printf("    cmp rax, 0\n");
         printf("    je .Lelse%d\n", id);
@@ -71,7 +71,7 @@ void gen(Node *node, Map *variables) {
     if (node->ty == ND_WHILE) {
         int id = gen_unique_id();
         printf(".Lwhile%d:\n", id);
-        gen(node->test_statement, variables);
+        gen(node->cond_statement, variables);
         printf("    pop rax\n");
         printf("    cmp rax, 0\n");
         printf("    je .Lwhend%d\n", id);

@@ -34,19 +34,19 @@ Node *new_node_block(Vector *statements) {
     return node;
 }
 
-Node *new_node_ifelse(Node *test_stmt, Node *then_stmt, Node *else_stmt) {
+Node *new_node_ifelse(Node *cond_stmt, Node *then_stmt, Node *else_stmt) {
     Node *node = malloc(sizeof(Node));
     node->ty = ND_IFELSE;
-    node->test_statement = test_stmt;
+    node->cond_statement = cond_stmt;
     node->then_statement = then_stmt;
     node->else_statement = else_stmt;
     return node;
 }
 
-Node *new_node_while(Node *test_stmt, Node *then_stmt) {
+Node *new_node_while(Node *cond_stmt, Node *then_stmt) {
     Node *node = malloc(sizeof(Node));
     node->ty = ND_WHILE;
-    node->test_statement = test_stmt;
+    node->cond_statement = cond_stmt;
     node->then_statement = then_stmt;
 }
 
@@ -175,7 +175,7 @@ Node *stmt() {
 
     if (consume(TK_IF)) {
         must_consume('(');
-        Node *test_stmt = expr();
+        Node *cond_stmt = expr();
         must_consume(')');
         Node *then_stmt = stmt();
         Node *else_stmt;
@@ -184,15 +184,15 @@ Node *stmt() {
         } else {
             else_stmt = new_node_block(new_vector());
         }
-        return new_node_ifelse(test_stmt, then_stmt, else_stmt);
+        return new_node_ifelse(cond_stmt, then_stmt, else_stmt);
     }
 
     if (consume(TK_WHILE)) {
         must_consume('(');
-        Node *test_stmt = expr();
+        Node *cond_stmt = expr();
         must_consume(')');
         Node *then_stmt = stmt();
-        return new_node_while(test_stmt, then_stmt);
+        return new_node_while(cond_stmt, then_stmt);
     }
 
     Node *node;

@@ -84,7 +84,7 @@ typedef struct Node {
     int val;                     // only used when ND_NUM
     char *name;                  // only used when ND_IDENT
     Vector *statements;          // only used when ND_BLOCK
-    struct Node *test_statement; // only used when ND_IFELSE, WHILE
+    struct Node *cond_statement; // only used when ND_IFELSE, WHILE
     struct Node *then_statement; // only used when ND_IFELSE, WHILE
     struct Node *else_statement; // only used when ND_IFELSE
 } Node;
