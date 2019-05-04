@@ -64,6 +64,7 @@ void gen(Node *node, Map *variables) {
             printf("    pop rax\n");
         }
         return;
+        printf("    push rax\n");
     }
 
     if (node->ty == '=') {
