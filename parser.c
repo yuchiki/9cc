@@ -34,12 +34,27 @@ Node *new_node_block(Vector *statements) {
     return node;
 }
 
+Node *new_node_ifelse(Node *test_stmt, Node *then_stmt, Node *else_stmt) {
+    Node *node = malloc(sizeof(Node));
+    node->ty = ND_IFELSE;
+    node->test_statement = test_stmt;
+    node->then_statement = then_stmt;
+    node->else_statement = else_stmt;
+    return node;
+}
+
 int pos = 0;
 
 int consume(int ty) {
     if ((((Token **)(tokens->data))[pos])->ty != ty) return 0;
     pos++;
     return 1;
+}
+
+void must_consume(int ty) {
+    if (!consume(ty))
+        error("%d:'%c'ではないトークンです: %s", ty, (char)ty,
+              (((Token **)(tokens->data))[pos])->input);
 }
 
 Node *expr();
@@ -149,6 +164,23 @@ Node *stmt() {
         Vector *statements = new_vector();
         while (!consume('}')) vec_push(statements, stmt());
         return new_node_block(statements);
+    }
+
+    if (consume(TK_IF)) {
+        must_consume('(');
+        Node *test_stmt = expr();
+        must_consume(')');
+        Node *then_stmt = stmt();
+        Node *else_stmt;
+        if (consume(TK_ELSE)) {
+            else_stmt = stmt();
+        } else {
+            else_stmt = new_node_block(new_vector());
+        }
+        return new_node_ifelse(test_stmt, then_stmt, else_stmt);
+
+        // ここにpopを挟むべき？ statmentのときと
+        //{ ... }のときでpopしてるかしてないかが違わないか？
     }
 
     Node *node;

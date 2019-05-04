@@ -44,6 +44,7 @@ int main(int argc, char **argv) {
 
     int i = 0;
     Map *variables = new_map();
+
     while (code[i]) {
         gen(code[i], variables);
         i++;

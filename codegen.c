@@ -44,6 +44,20 @@ void gen(Node *node, Map *variables) {
         return;
     }
 
+    if (node->ty == ND_IFELSE) {
+        gen(node->test_statement, variables);
+        printf("    pop rax\n");
+        printf("    cmp rax, 0\n");
+        printf("    je .Lelse\n");
+        gen(node->then_statement, variables);
+        printf("    jmp .Lfi\n");
+        printf(".Lelse:\n");
+        gen(node->else_statement, variables);
+        printf(".Lfi:");
+
+        return;
+    }
+
     if (node->ty == ND_BLOCK) {
         for (int i = 0; i < node->statements->len; i++) {
             gen(node->statements->data[i], variables);
