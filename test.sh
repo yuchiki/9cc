@@ -60,5 +60,6 @@ try 9 "foo = 1; bar = 2; baz = 3; foo = 4; return foo + bar + baz;"
 
 try 9 "foo = 1; { bar = 2; baz = 3; } foo = 4; return foo + bar + baz;"
 
+try 10 "returnx = 10; x = 4; return returnx;"
 
 echo OK
