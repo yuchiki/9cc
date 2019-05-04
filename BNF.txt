@@ -1,0 +1,9 @@
+program := stmt*
+stmt := { stmt* } | return assign; | assign;
+assign := equality | equality = assign
+equality := relational | equality eq_operator relational
+relational := add | relational rel_operator add
+add := mul | add add_operator mul
+unary := term | (+-) term
+term := (expr) | number | identifier
+expr = assign
