@@ -40,7 +40,7 @@ int main(int argc, char **argv) {
     // prologue
     printf("    push rbp\n");
     printf("    mov rbp, rsp\n");
-    printf("    sub rsp, 208\n"); // 8 * 26
+    printf("    sub rsp, %d\n", 8 * MAX_VARIABLE);
 
     int i = 0;
     Map *variables = new_map();

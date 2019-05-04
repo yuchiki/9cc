@@ -3,6 +3,9 @@
 
 #include "9cc.h"
 
+int unique_id = 0;
+int gen_unique_id() { return unique_id++; }
+
 void gen_lval(Node *node, Map *variables) { // push the address
     if (node->ty != ND_IDENT) {
         error("代入の左辺値が変数ではありません");
@@ -45,15 +48,16 @@ void gen(Node *node, Map *variables) {
     }
 
     if (node->ty == ND_IFELSE) {
+        int id = gen_unique_id();
         gen(node->test_statement, variables);
         printf("    pop rax\n");
         printf("    cmp rax, 0\n");
-        printf("    je .Lelse\n");
+        printf("    je .Lelse%d\n", id);
         gen(node->then_statement, variables);
-        printf("    jmp .Lfi\n");
-        printf(".Lelse:\n");
+        printf("    jmp .Lfi%d\n", id);
+        printf(".Lelse%d:\n", id);
         gen(node->else_statement, variables);
-        printf(".Lfi:");
+        printf(".Lfi%d:\n", id);
 
         return;
     }

@@ -64,6 +64,7 @@ try 10 "returnx = 10; x = 4; return returnx;"
 
 try 2 "if (1) 2; else 3;"
 try 3 "if (0) 2; else 3;"
+try 4 "if (0) 2; else if (0) 3; else 4;"
 
 
 echo OK

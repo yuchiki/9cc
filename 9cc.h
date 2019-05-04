@@ -8,6 +8,8 @@ void error(char *fmt, ...);
 
 /////////////////////////// vector
 
+#define MAX_VARIABLE 26
+
 typedef struct {
     void **data;
     int capacity;
