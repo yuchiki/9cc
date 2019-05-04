@@ -8,7 +8,7 @@ void error(char *fmt, ...);
 
 /////////////////////////// vector
 
-#define MAX_VARIABLES 26
+#define MAX_VARIABLES 3
 
 typedef struct {
     void **data;
@@ -44,6 +44,7 @@ enum {
     TK_IF,
     TK_ELSE,
     TK_WHILE,
+    TK_FOR,
     TK_EQ,
     TK_NE,
     TK_LE,
@@ -71,6 +72,7 @@ enum {
     ND_BLOCK,
     ND_IFELSE,
     ND_WHILE,
+    ND_FOR,
     ND_EQ,
     ND_NE,
     ND_LE,
@@ -84,9 +86,11 @@ typedef struct Node {
     int val;                     // only used when ND_NUM
     char *name;                  // only used when ND_IDENT
     Vector *statements;          // only used when ND_BLOCK
-    struct Node *cond_statement; // only used when ND_IFELSE, WHILE
-    struct Node *then_statement; // only used when ND_IFELSE, WHILE
+    struct Node *cond_statement; // only used when ND_IFELSE, WHILE, FOR
+    struct Node *then_statement; // only used when ND_IFELSE, WHILE, FOR
     struct Node *else_statement; // only used when ND_IFELSE
+    struct Node *init_statement; // only used when ND_FOR
+    struct Node *loop_statement; // only used when ND_FOR
 } Node;
 
 void parse(Vector *tokenized_tokens);

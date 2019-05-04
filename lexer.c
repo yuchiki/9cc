@@ -61,6 +61,12 @@ Vector *tokenize(char *p) {
             continue;
         }
 
+        if (strncmp(p, "for", 3) == 0 && !isalnum(p[3])) {
+            vec_push(tokens, new_token(TK_FOR, p));
+            p += 3;
+            continue;
+        }
+
         if (strncmp(p, ">=", 2) == 0) {
             vec_push(tokens, new_token(TK_GE, p));
             p += 2;

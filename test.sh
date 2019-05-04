@@ -68,5 +68,7 @@ try 4 "if (0) 2; else if (0) 3; else 4;"
 
 try 55 "a = 0; sum = 0; while (a <= 10) { sum = sum + a; a = a + 1; } sum;"
 
+try 55 "sum = 0; for (i = 0; i <= 10; i = i + 1) sum = sum + i; sum;"
+
 
 echo OK

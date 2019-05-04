@@ -50,6 +50,17 @@ Node *new_node_while(Node *cond_stmt, Node *then_stmt) {
     node->then_statement = then_stmt;
 }
 
+Node *new_node_for(Node *init_stmt, Node *cond_stmt, Node *loop_stmt,
+                   Node *then_stmt) {
+    Node *node = malloc(sizeof(Node));
+    node->ty = ND_FOR;
+    node->init_statement = init_stmt;
+    node->cond_statement = cond_stmt;
+    node->loop_statement = loop_stmt;
+    node->then_statement = then_stmt;
+    return node;
+}
+
 int pos = 0;
 
 int consume(int ty) {
@@ -193,6 +204,19 @@ Node *stmt() {
         must_consume(')');
         Node *then_stmt = stmt();
         return new_node_while(cond_stmt, then_stmt);
+    }
+
+    if (consume(TK_FOR)) {
+        must_consume('(');
+        Node *init_stmt = expr();
+        must_consume(';');
+        Node *cond_stmt = expr();
+        must_consume(';');
+        Node *loop_stmt = expr();
+        must_consume(')');
+        Node *then_stmt = stmt();
+
+        return new_node_for(init_stmt, cond_stmt, loop_stmt, then_stmt);
     }
 
     Node *node;

@@ -82,13 +82,32 @@ void gen(Node *node, Map *variables) {
         return;
     }
 
+    if (node->ty == ND_FOR) {
+        int id = gen_unique_id();
+        gen(node->init_statement, variables);
+        printf("    pop rax\n");
+        printf(".Lfor%d:\n", id);
+        gen(node->cond_statement, variables);
+        printf("    pop rax\n");
+        printf("    cmp rax, 0\n");
+        printf("    je .Lforend%d\n", id);
+        gen(node->then_statement, variables);
+        printf("    pop rax\n");
+        gen(node->loop_statement, variables);
+        printf("    pop rax\n");
+        printf("    jmp .Lfor%d\n", id);
+        printf(".Lforend%d:\n", id);
+        printf("    push rax\n");
+        return;
+    }
+
     if (node->ty == ND_BLOCK) {
         for (int i = 0; i < node->statements->len; i++) {
             gen(node->statements->data[i], variables);
             printf("    pop rax\n");
         }
-        return;
         printf("    push rax\n");
+        return;
     }
 
     if (node->ty == '=') {

@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "*.fst": "fsharp",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "9cc.h": "c"
     }
 }
