@@ -62,6 +62,14 @@ Node *new_node_for(Node *init_stmt, Node *cond_stmt, Node *loop_stmt,
     return node;
 }
 
+Node *new_node_call(char *name, Vector *arguments) {
+    Node *node = malloc(sizeof(Node));
+    node->ty = ND_CALL;
+    node->name = name;
+    node->arguments = arguments;
+    return node;
+}
+
 int pos = 0;
 
 int consume(int ty) {
@@ -94,7 +102,24 @@ Node *term() {
     }
 
     if ((((Token **)(tokens->data))[pos])->ty == TK_IDENT) {
-        return new_node_ident((((Token **)(tokens->data))[pos++])->name);
+
+        char *name = (((Token **)(tokens->data))[pos++])->name;
+
+        if (consume('(')) {
+            Vector *arguments = new_vector();
+            if (consume(')')) {
+                return new_node_call(name, arguments);
+            }
+            vec_push(arguments, expr());
+
+            while (consume(',')) {
+                vec_push(arguments, expr());
+            }
+            must_consume(')');
+            return new_node_call(name, arguments);
+        }
+
+        return new_node_ident(name);
     }
 
     error("開き括弧でも数値でもないトークンです: %s\n",

@@ -44,6 +44,34 @@ void gen(Node *node, Map *variables) {
         return;
     }
 
+    if (node->ty == ND_CALL) {
+        int stack_depth = 0; // this is temporary.
+
+        if (node->arguments->len > 6)
+            error("too many arguments for %s\n", node->name);
+
+        for (int i = 0; i < node->arguments->len; i++)
+            gen(node->arguments->data[i], variables);
+
+        if (node->arguments->len >= 6) printf("    pop r9\n");
+        if (node->arguments->len >= 5) printf("    pop r8\n");
+        if (node->arguments->len >= 4) printf("    pop rcx\n");
+        if (node->arguments->len >= 3) printf("    pop rdx\n");
+        if (node->arguments->len >= 2) printf("    pop rsi\n");
+        if (node->arguments->len >= 1) printf("    pop rdi\n");
+
+        if (stack_depth % 2 == 1) {
+            printf("    push rax\n");
+            printf("    call %s\n", node->name);
+            printf("    pop rax\n");
+        } else {
+            printf("    call %s\n", node->name);
+        }
+        printf("    push rax\n");
+
+        return;
+    }
+
     if (node->ty == ND_RETURN) {
         gen(node->lhs, variables);
         printf("    pop rax\n");

@@ -70,5 +70,7 @@ try 55 "a = 0; sum = 0; while (a <= 10) { sum = sum + a; a = a + 1; } sum;"
 
 try 55 "sum = 0; for (i = 0; i <= 10; i = i + 1) sum = sum + i; sum;"
 
+try 2 "return add(5,6);"
+
 
 echo OK

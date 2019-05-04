@@ -8,7 +8,10 @@ void error(char *fmt, ...);
 
 /////////////////////////// vector
 
-#define MAX_VARIABLES 3
+// MAX_VARIABLES must be odd.
+// if even, the function call gets broken.
+// in the ABI, sbp must be a multiple of 16 when do call.
+#define MAX_VARIABLES 9
 
 typedef struct {
     void **data;
@@ -68,6 +71,7 @@ Vector *tokenize(char *p);
 enum {
     ND_NUM = 256,
     ND_IDENT,
+    ND_CALL,
     ND_RETURN,
     ND_BLOCK,
     ND_IFELSE,
@@ -84,8 +88,9 @@ typedef struct Node {
     struct Node *lhs;
     struct Node *rhs;
     int val;                     // only used when ND_NUM
-    char *name;                  // only used when ND_IDENT
+    char *name;                  // only used when ND_IDENT, CALL
     Vector *statements;          // only used when ND_BLOCK
+    Vector *arguments;           // only used when ND_CALL
     struct Node *cond_statement; // only used when ND_IFELSE, WHILE, FOR
     struct Node *then_statement; // only used when ND_IFELSE, WHILE, FOR
     struct Node *else_statement; // only used when ND_IFELSE
