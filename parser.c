@@ -223,7 +223,7 @@ Node *stmt() {
     Node *node;
 
     if (consume(TK_RETURN)) {
-        node = new_node(TK_RETURN, assign(), NULL);
+        node = new_node(ND_RETURN, assign(), NULL);
     } else {
         node = assign();
     }
