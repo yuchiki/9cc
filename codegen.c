@@ -76,6 +76,7 @@ void gen(Node *node, Map *variables) {
         printf("    cmp rax, 0\n");
         printf("    je .Lwhend%d\n", id);
         gen(node->then_statement, variables);
+        printf("    pop rax\n");
         printf("    jmp .Lwhile%d\n", id);
         printf(".Lwhend%d:\n", id);
         return;
