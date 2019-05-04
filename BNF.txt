@@ -6,4 +6,4 @@ relational := add | relational rel_operator add
 add := mul | add add_operator mul
 unary := term | (+-) term
 term := (expr) | number | identifier
-expr = assign
+expr := assign
