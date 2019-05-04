@@ -48,6 +48,7 @@ Node *new_node_while(Node *cond_stmt, Node *then_stmt) {
     node->ty = ND_WHILE;
     node->cond_statement = cond_stmt;
     node->then_statement = then_stmt;
+    return node;
 }
 
 Node *new_node_for(Node *init_stmt, Node *cond_stmt, Node *loop_stmt,
