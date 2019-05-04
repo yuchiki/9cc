@@ -16,6 +16,12 @@ void gen_lval(Node *node, Map *variables) { // push the address
     if (offset == 0) {
         offset = (variables->keys->len + 1) * 8;
         map_put(variables, node->name, (void *)offset);
+
+        if (variables->keys->len > MAX_VARIABLES) {
+            error("too many variables. only %d variables are allowed in a "
+                  "function.\n",
+                  MAX_VARIABLES);
+        }
     }
 
     printf("    mov rax, rbp\n");
@@ -59,6 +65,19 @@ void gen(Node *node, Map *variables) {
         gen(node->else_statement, variables);
         printf(".Lfi%d:\n", id);
 
+        return;
+    }
+
+    if (node->ty == ND_WHILE) {
+        int id = gen_unique_id();
+        printf(".Lwhile%d:\n", id);
+        gen(node->test_statement, variables);
+        printf("    pop rax\n");
+        printf("    cmp rax, 0\n");
+        printf("    je .Lwhend%d\n", id);
+        gen(node->then_statement, variables);
+        printf("    jmp .Lwhile%d\n", id);
+        printf(".Lwhend%d:\n", id);
         return;
     }
 

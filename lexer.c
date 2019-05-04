@@ -55,6 +55,12 @@ Vector *tokenize(char *p) {
             continue;
         }
 
+        if (strncmp(p, "while", 5) == 0 && !isalnum(p[5])) {
+            vec_push(tokens, new_token(TK_WHILE, p));
+            p += 5;
+            continue;
+        }
+
         if (strncmp(p, ">=", 2) == 0) {
             vec_push(tokens, new_token(TK_GE, p));
             p += 2;

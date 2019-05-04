@@ -43,6 +43,13 @@ Node *new_node_ifelse(Node *test_stmt, Node *then_stmt, Node *else_stmt) {
     return node;
 }
 
+Node *new_node_while(Node *test_stmt, Node *then_stmt) {
+    Node *node = malloc(sizeof(Node));
+    node->ty = ND_WHILE;
+    node->test_statement = test_stmt;
+    node->then_statement = then_stmt;
+}
+
 int pos = 0;
 
 int consume(int ty) {
@@ -178,9 +185,14 @@ Node *stmt() {
             else_stmt = new_node_block(new_vector());
         }
         return new_node_ifelse(test_stmt, then_stmt, else_stmt);
+    }
 
-        // ここにpopを挟むべき？ statmentのときと
-        //{ ... }のときでpopしてるかしてないかが違わないか？
+    if (consume(TK_WHILE)) {
+        must_consume('(');
+        Node *test_stmt = expr();
+        must_consume(')');
+        Node *then_stmt = stmt();
+        return new_node_while(test_stmt, then_stmt);
     }
 
     Node *node;
