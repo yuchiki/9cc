@@ -70,6 +70,8 @@ try 55 "main() { a = 0; sum = 0; while (a <= 10) { sum = sum + a; a = a + 1; } s
 
 try 55 "main() { sum = 0; for (i = 0; i <= 10; i = i + 1) sum = sum + i; sum; }"
 
+try 10 "main() { return foo(); } foo() { return 10; }"
+
 # try 2 "return add(5,6);"
 
 

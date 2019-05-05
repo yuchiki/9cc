@@ -304,17 +304,11 @@ Function_Definition *function_definition() {
     return new_function(name, arguments, new_node_block(statements));
 }
 
-Node *code[100];
-
-void program() {
-    int i = 0;
-    while ((((Token **)(tokens->data))[pos])->ty != TK_EOF) {
-        code[i++] = stmt();
-    }
-    code[i] = NULL;
-}
-
-Function_Definition *parse(Vector *tokenized_tokens) {
+Vector *parse(Vector *tokenized_tokens) {
     tokens = tokenized_tokens;
-    return function_definition();
+
+    Vector *functions = new_vector();
+    while (((Token *)(tokens->data[pos]))->ty != TK_EOF)
+        vec_push(functions, function_definition());
+    return functions;
 }

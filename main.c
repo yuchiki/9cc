@@ -29,14 +29,13 @@ int main(int argc, char **argv) {
     }
 
     Vector *tokens = tokenize(argv[1]);
-
-    Function_Definition *function = parse(tokens);
+    Vector *functions = parse(tokens);
 
     // output header
     printf(".intel_syntax noprefix\n");
     printf(".global main\n");
 
-    function_gen(function);
+    for (int i = 0; i < functions->len; i++) function_gen(functions->data[i]);
 
     return 0;
 }

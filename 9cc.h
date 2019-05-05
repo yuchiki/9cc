@@ -104,13 +104,11 @@ typedef struct {
     Node *body;
 } Function_Definition;
 
-Function_Definition *parse(Vector *tokenized_tokens);
+Vector *parse(Vector *tokenized_tokens);
 
 extern Node *code[100];
 
 ////////////////////// codegen
-
-void gen(Node *node, Map *variables);
 
 void function_gen(Function_Definition *function);
 
