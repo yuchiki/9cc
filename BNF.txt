@@ -1,5 +1,8 @@
 program := stmt*
 stmt := { stmt* } | return assign; | assign;
+        | if (expr) stmt | if (expr) stmt else stmt
+        | while (expr) stmt
+        | for (expr; expr; expr) stmt
 assign := equality | equality = assign
 equality := relational | equality eq_operator relational
 relational := add | relational rel_operator add
