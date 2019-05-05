@@ -72,10 +72,7 @@ try 55 "main() { sum = 0; for (i = 0; i <= 10; i = i + 1) sum = sum + i; sum; }"
 
 try 10 "main() { return foo(); } foo() { return 10; }"
 try 7 "main() { return 2 + foo(2, 3); } foo(a, b) { return a + b; }"
-
 try 89 "main() { return fib(11); } fib(n) { if (n <= 1) return n; return fib(n - 1) + fib(n - 2); }"
-
-# try 2 "return add(5,6);"
 
 
 echo OK
