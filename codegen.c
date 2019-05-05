@@ -6,6 +6,18 @@
 int unique_id = 0;
 int gen_unique_id() { return unique_id++; }
 
+long push_variable(Map *variables, char *name) {
+    long offset = (variables->keys->len + 1) * 8;
+    map_put(variables, name, (void *)offset);
+
+    if (variables->keys->len > MAX_VARIABLES) {
+        error("too many variables. only %d variables are allowed in a "
+              "function.\n",
+              MAX_VARIABLES);
+    }
+    return offset;
+}
+
 void gen_lval(Node *node, Map *variables) { // push the address
     if (node->ty != ND_IDENT) {
         error("代入の左辺値が変数ではありません");
@@ -13,16 +25,7 @@ void gen_lval(Node *node, Map *variables) { // push the address
 
     long offset = (long)map_get(variables, node->name);
 
-    if (offset == 0) {
-        offset = (variables->keys->len + 1) * 8;
-        map_put(variables, node->name, (void *)offset);
-
-        if (variables->keys->len > MAX_VARIABLES) {
-            error("too many variables. only %d variables are allowed in a "
-                  "function.\n",
-                  MAX_VARIABLES);
-        }
-    }
+    if (offset == 0) offset = push_variable(variables, node->name);
 
     printf("    mov rax, rbp\n");
     printf("    sub rax, %ld\n", offset);
@@ -201,8 +204,12 @@ void function_gen(Function_Definition *function) {
     printf("    mov rbp, rsp\n");
     printf("    sub rsp, %d\n", 8 * MAX_VARIABLES);
 
-    if (function->arguments->len > 0)
-        error("funcdef:arguments are not yet supported.");
+    if (function->arguments->len >= 6) printf("    mov [rbp-48], r9\n");
+    if (function->arguments->len >= 5) printf("    mov [rbp-40], r8\n");
+    if (function->arguments->len >= 4) printf("    mov [rbp-32], rcx\n");
+    if (function->arguments->len >= 3) printf("    mov [rbp-24], rdx\n");
+    if (function->arguments->len >= 2) printf("    mov [rbp-16], rsi\n");
+    if (function->arguments->len >= 1) printf("    mov [rbp-8], rdi\n");
 
     gen(function->body, new_map());
 
