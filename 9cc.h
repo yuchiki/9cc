@@ -98,12 +98,20 @@ typedef struct Node {
     struct Node *loop_statement; // only used when ND_FOR
 } Node;
 
-void parse(Vector *tokenized_tokens);
+typedef struct {
+    char *name;
+    Vector *arguments;
+    Node *body;
+} Function_Definition;
+
+Function_Definition *parse(Vector *tokenized_tokens);
 
 extern Node *code[100];
 
 ////////////////////// codegen
 
 void gen(Node *node, Map *variables);
+
+void function_gen(Function_Definition *function);
 
 #endif // NINECC_H

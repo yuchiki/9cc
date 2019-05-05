@@ -70,6 +70,14 @@ Node *new_node_call(char *name, Vector *arguments) {
     return node;
 }
 
+Function_Definition *new_function(char *name, Vector *arguments, Node *body) {
+    Function_Definition *definition = malloc(sizeof(Function_Definition));
+    definition->name = name;
+    definition->arguments = arguments;
+    definition->body = body;
+    return definition;
+}
+
 int pos = 0;
 
 int consume(int ty) {
@@ -85,6 +93,13 @@ void must_consume(int ty) {
 }
 
 Node *expr();
+
+char *ident() {
+    if ((((Token **)(tokens->data))[pos])->ty != TK_IDENT)
+        error("This is not an identifier:%s\n",
+              ((Token *)tokens->data[pos])->input);
+    return (((Token **)(tokens->data))[pos++])->name;
+}
 
 Node *term() {
     if (consume('(')) {
@@ -102,8 +117,7 @@ Node *term() {
     }
 
     if ((((Token **)(tokens->data))[pos])->ty == TK_IDENT) {
-
-        char *name = (((Token **)(tokens->data))[pos++])->name;
+        char *name = ident();
 
         if (consume('(')) {
             Vector *arguments = new_vector();
@@ -203,6 +217,8 @@ Node *assign() {
     return node;
 }
 
+Node *expr() { return assign(); }
+
 Node *stmt() {
     if (consume('{')) {
         Vector *statements = new_vector();
@@ -259,7 +275,34 @@ Node *stmt() {
     return node;
 }
 
-Node *expr() { return assign(); }
+Vector *definition_argument_list() {
+    must_consume('(');
+    Vector *arguments = new_vector();
+    if (consume(')')) {
+        return arguments;
+    }
+    vec_push(arguments, ident());
+
+    while (consume(',')) {
+        vec_push(arguments, ident());
+    }
+    must_consume(')');
+    return arguments;
+}
+
+Function_Definition *function_definition() {
+    if (((Token *)(tokens->data[pos]))->ty != TK_IDENT)
+        error("function does not start from identifier: %s\n",
+              ((Token *)(tokens->data[pos]))->input);
+    char *name = (((Token **)(tokens->data))[pos++])->name;
+
+    Vector *arguments = definition_argument_list();
+
+    must_consume('{');
+    Vector *statements = new_vector();
+    while (!consume('}')) vec_push(statements, stmt());
+    return new_function(name, arguments, new_node_block(statements));
+}
 
 Node *code[100];
 
@@ -271,7 +314,7 @@ void program() {
     code[i] = NULL;
 }
 
-void parse(Vector *tokenized_tokens) {
+Function_Definition *parse(Vector *tokenized_tokens) {
     tokens = tokenized_tokens;
-    program();
+    return function_definition();
 }

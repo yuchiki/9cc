@@ -30,32 +30,13 @@ int main(int argc, char **argv) {
 
     Vector *tokens = tokenize(argv[1]);
 
-    parse(tokens);
+    Function_Definition *function = parse(tokens);
 
     // output header
     printf(".intel_syntax noprefix\n");
     printf(".global main\n");
-    printf("main:\n");
 
-    // prologue
-    printf("    push rbp\n");
-    printf("    mov rbp, rsp\n");
-    printf("    sub rsp, %d\n", 8 * MAX_VARIABLES);
-
-    int i = 0;
-    Map *variables = new_map();
-
-    while (code[i]) {
-        gen(code[i], variables);
-        i++;
-
-        printf("    pop rax\n");
-    }
-
-    // epilogue
-    printf("    mov rsp, rbp\n");
-    printf("    pop rbp\n");
-    printf("    ret\n");
+    function_gen(function);
 
     return 0;
 }

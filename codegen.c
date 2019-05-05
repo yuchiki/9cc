@@ -192,3 +192,23 @@ void gen(Node *node, Map *variables) {
     }
     printf("    push rax\n");
 }
+
+void function_gen(Function_Definition *function) {
+
+    printf("%s:\n", function->name);
+    // prologue
+    printf("    push rbp\n");
+    printf("    mov rbp, rsp\n");
+    printf("    sub rsp, %d\n", 8 * MAX_VARIABLES);
+
+    if (function->arguments->len > 0)
+        error("funcdef:arguments are not yet supported.");
+
+    gen(function->body, new_map());
+
+    printf("    pop rax\n");
+    // epilogue
+    printf("    mov rsp, rbp\n");
+    printf("    pop rbp\n");
+    printf("    ret\n");
+}

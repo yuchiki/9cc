@@ -1,12 +1,17 @@
 program := stmt*
-stmt := { stmt* } | return assign; | assign;
+function_definition := identifier definition_argument_list block
+stmt := block | return assign; | assign;
         | if (expr) stmt | if (expr) stmt else stmt
         | while (expr) stmt
         | for (expr; expr; expr) stmt
+block := { stmt* }
 assign := equality | equality = assign
 equality := relational | equality eq_operator relational
 relational := add | relational rel_operator add
 add := mul | add add_operator mul
 unary := term | (+-) term
-term := (expr) | number | identifier | identifier (argument_list)
+term := (expr) | number | identifier | identifier argument_list
 expr := assign
+
+definition_argument_list := '(' identifier (',' identifier)* ')'
+argument_list := '(' expr (',' expr)* ')'
