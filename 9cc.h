@@ -42,6 +42,7 @@ void runtest();
 // type of token
 enum {
     TK_NUM = 256,
+    TK_STRING,
     TK_IDENT,
     TK_RETURN,
     TK_IF,
@@ -58,10 +59,11 @@ enum {
 };
 
 typedef struct {
-    int ty;      // type of token
-    int val;     // used when TK_NUM
-    char *name;  // used when TK_IDENT
-    char *input; // (for error message)
+    int ty;       // type of token
+    int val;      // used when TK_NUM
+    char *name;   // used when TK_IDENT
+    char *string; // used when TK_STRING
+    char *input;  // (for error message)
 } Token;
 
 Vector *tokenize(char *p);

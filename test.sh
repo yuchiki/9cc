@@ -72,4 +72,6 @@ try 10 "main() { return foo(); } foo() { return 10; }"
 try 7 "main() { return 2 + foo(2, 3); } foo(a, b) { return a + b; }"
 try 89 "main() { return fib(11); } fib(n) { if (n <= 1) return n; return fib(n - 1) + fib(n - 2); }"
 
+# try 0 "main() { printf(\"hoge\") }"
+
 echo OK

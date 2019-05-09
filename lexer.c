@@ -28,12 +28,33 @@ Token *new_token_ident(char *name, char *input) {
     return token;
 }
 
+Token *new_token_string(char *string, char *input) {
+    Token *token = malloc(sizeof(Token));
+    token->ty = TK_STRING;
+    token->string = string;
+    token->input = input;
+    return token;
+}
+
 Vector *tokenize(char *p) {
     Vector *tokens = new_vector();
     while (*p) {
         // skip spaces
         if (isspace(*p)) {
             p++;
+            continue;
+        }
+
+        if (*p == '"') {
+            p++;
+            int len = 0;
+            while (*(p + len) != '"') len++;
+
+            char *string = malloc(len + 1);
+            strncpy(string, p, len);
+            string[len] = '\0';
+            vec_push(tokens, new_token_string(string, p - 1));
+            p += len + 1;
             continue;
         }
 
@@ -117,6 +138,7 @@ Vector *tokenize(char *p) {
             continue;
         }
 
+        // ident
         if (isalpha(*p)) {
             int len = 1;
             while (isalnum(*(p + len))) len++;
