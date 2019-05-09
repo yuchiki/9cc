@@ -72,6 +72,7 @@ Vector *tokenize(char *p);
 
 enum {
     ND_NUM = 256,
+    ND_STRING,
     ND_IDENT,
     ND_CALL,
     ND_RETURN,
@@ -90,6 +91,7 @@ typedef struct Node {
     struct Node *lhs;
     struct Node *rhs;
     int val;                     // only used when ND_NUM
+    char *string;                // only used when ND_STRING
     char *name;                  // only used when ND_IDENT, CALL
     Vector *statements;          // only used when ND_BLOCK
     Vector *arguments;           // only used when ND_CALL

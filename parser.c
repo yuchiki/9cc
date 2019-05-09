@@ -70,6 +70,13 @@ Node *new_node_call(char *name, Vector *arguments) {
     return node;
 }
 
+Node *new_node_string(char *string) {
+    Node *node = malloc(sizeof(Node));
+    node->ty = ND_STRING;
+    node->string = string;
+    return node;
+}
+
 Function_Definition *new_function(char *name, Vector *arguments, Node *body) {
     Function_Definition *definition = malloc(sizeof(Function_Definition));
     definition->name = name;
@@ -114,6 +121,10 @@ Node *term() {
 
     if ((((Token **)(tokens->data))[pos])->ty == TK_NUM) {
         return new_node_num((((Token **)(tokens->data))[pos++])->val);
+    }
+
+    if ((((Token **)(tokens->data))[pos])->ty == TK_STRING) {
+        return new_node_string((((Token **)(tokens->data))[pos++])->string);
     }
 
     if ((((Token **)(tokens->data))[pos])->ty == TK_IDENT) {
